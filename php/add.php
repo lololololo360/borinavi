@@ -8,15 +8,16 @@ function add_evil_store($store_id) {
         $statement->bindParam(':store_id', $store_id, PDO::PARAM_STR);
         $response = $statement->execute();
     } catch (PDOException $e) {
-        die($e->getMessage());
+        console($e->getMessage());
+        return -1;
     }
 
 
     if($response) {
         echo "Registration completed.";
-        return true;
+        return 1;
     } else {
         echo "Registration failed.";
-        return false;
+        return 0;
     }
 }

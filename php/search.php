@@ -1,8 +1,8 @@
-function threshold($val) {
+function is_evil($val) {
     if($val <= 3) {
-        return false; // So-so.
+        return 0; // So-so.
     } else {
-        return true; // Bad.
+        return 1; // Bad.
     }
 }
 
@@ -21,5 +21,5 @@ function inquire_evil_value($store_id) {
     }
 
     $evil_value = count($db_handler->fetchAll());
-    return threshold($evil_value);
+    return is_evil($evil_value);
 }
