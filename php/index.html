@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>ぼりなび Webサービス</title>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+		<link rel="dns-prefetch" href="//fonts.googleapis.com" />
+		<link rel="dns-prefetch" href="//code.jquery.com" />
+		<link rel="stylesheet" href="./css/animate.css" />
+		<script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="js/bootstrap-progressbar.min.js"></script>
+		<style type="text/css">
+			body {
+				font-size: 18px;
+			}
+		</style>
+	</head>
+	<body>
+  <?php include "require.php"; ?>
+		<div style="width: 100%">
+			<h1>ぼりなび Webサービス</h1>
+			<br><br>
+			<label class="label label-info">検索ワード</label>
+			<input type="text" class="js--address">
+      <input type="button" value="検索" class="js--apply" /> 
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<label class="label label-info">ぼったくりの店の店舗ＩＤを登録してください</label>
+			<input type="text" class="tenpoid">
+      <input type="button" value="登録" class="js--regist" /> 
+			<div class="progress">
+			</div>
+
+		<script>
+      (function(){
+           var url = 'http://api.gnavi.co.jp/RestSearchAPI/20150630/?callback=?';
+           var params = {
+                keyid: '7d0c35dc79380957efda04aa97a16c36',
+                format: 'json',
+                hit_per_page:'50',
+                address: ''
+           };
+
+           var showResult = function(result){
+                if ( result.total_hit_count > 0 ) {
+                    var res = '';       
+                    for ( var i in result.rest ){           
+      							  var span = 'span' + i;
+      								$("#result").append('<div id="' + span + '">');
+      								$("#result div:last").append('<table class="table table-striped table-bordered"></table>');
+      								$("#result div:last table:last").append('<tr></tr>');
+      								$("#result div:last table:last tr:last").append('<th style="width:5%;">評価</th><th style="width:10%;">店舗ID</th><th style="width:15%;">店舗名</th><th style="width:10%;">電話番号</th><th style="width:25%;">住所</th><th style="width:25%;">営業時間</th><th style="width:35%;">店舗画像</th>');
+      								$("#result div:last table:last").append('<tr></tr>');
+      								$("#result div:last table:last tr:last").append('<td></td>');
+      								$("#result div:last table:last tr:last").append('<td>' + result.rest[i].id + '</td>');
+      								$("#result div:last table:last tr:last").append('<td>' + result.rest[i].name + '</td>');
+      								$("#result div:last table:last tr:last").append('<td>' + result.rest[i].tel + '</td>');
+      								$("#result div:last table:last tr:last").append('<td>' + result.rest[i].address + '</td>');
+      								$("#result div:last table:last tr:last").append('<td>' + result.rest[i].opentime + '</td>');
+      								$("#result div:last table:last tr:last").append('<img src="' + result.rest[i].image_url.shop_image1 + '" style="width:100%">');
+      								if((i+1) % 2 == 1){
+      									$("#"+span).addClass('fadeInLeftBig animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+      										$(this).removeClass();
+      									}).css("animation-delay", i/5 + "s");
+      								}else{
+      									$("#"+span).addClass('fadeInRightBig animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+      										$(this).removeClass();
+      									}).css("animation-delay", i/5 + "s");
+      								}
+                    }       
+                 } else {
+                      alert( '検索結果が見つかりませんでした。' );     
+                 }
+           }
+
+           $(document).on('click', '.js--apply', function(){
+                params.address = $('.js--address').val();
+                $.getJSON(url, params, function(result){       
+                  showResult(result);     
+                });
+           });   
+
+           $(document).on('click', '.js--regist', function(){
+                var tenpoid = $('.tenpoid').val();
+                if(tenpoid ==""){
+                  alert("店舗ＩＤを入力してください");
+                }
+           });   
+
+      })(jQuery); 
+		</script>
+
+			<ul id="location"></ul>
+			<div id="result"></div>
+		</div>
+
+	</body>
+</html>

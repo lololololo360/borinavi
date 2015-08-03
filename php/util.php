@@ -1,4 +1,3 @@
-function h($s) {
-    return htmlspecialchars($s, ENT_QUOTES);
-}
-
+function h($s) { 
+    return htmlspecialchars($s, ENT_QUOTES); 
+} 
